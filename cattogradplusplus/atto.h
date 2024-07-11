@@ -1,5 +1,9 @@
-#ifndef VALUE_H
-#define VALUE_H
+//
+// Created by Dağhan Erdönmez on 10.07.2024.
+//
+
+#ifndef CATTOGRADPLUSPLUS_ATTO_H
+#define CATTOGRADPLUSPLUS_ATTO_H
 
 #include <iostream>
 #include <string>
@@ -36,6 +40,13 @@ public:
     Value relu();
     Value tanh();
     void backward();
+
+    friend Value operator+(double lhs, Value& rhs);
+    friend Value operator*(double lhs, Value& rhs);
+    friend Value operator-(double lhs, Value& rhs);
+    friend Value operator/(double lhs, Value& rhs);
+    friend std::ostream& operator<<(std::ostream& os, const Value& v);
 };
 
-#endif // VALUE_H
+
+#endif //CATTOGRADPLUSPLUS_ATTO_H

@@ -1,15 +1,13 @@
-#include "CattoGrad/atto.h"
 #include <iostream>
+#include "cattogradplusplus/atto.h"
 
-using namespace std;
+int main() {
 
-Value a = Value(2);
-Value b = Value(3);
+    Value a(3);
+    Value b(2);
 
-int main(){
+    Value c = 2.0 / a;
 
-    cout << "Name" << endl;
-
+    std::cout << c << std::endl;
     return 0;
-
 }

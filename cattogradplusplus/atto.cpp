@@ -1,7 +1,11 @@
+//
+// Created by Dağhan Erdönmez on 10.07.2024.
+//
+
 #include "atto.h"
 
 Value::Value(double data, std::set<Value*> children, std::string operation)
-    : data(data), gradient(0.0), _children(children), _operation(operation) {
+        : data(data), gradient(0.0), _children(children), _operation(operation) {
     _backward = []() {};
 }
 
@@ -14,8 +18,9 @@ Value Value::operator+(Value& other) {
     return out;
 }
 
-Value Value::operator+(double other) { 
-    return *this + Value(other);
+Value Value::operator+(double other) {
+    Value temp(other);
+    return *this + temp;
 }
 
 Value Value::operator*(Value& other) {
@@ -28,7 +33,8 @@ Value Value::operator*(Value& other) {
 }
 
 Value Value::operator*(double other) {
-    return *this * Value(other);
+    Value temp(other);
+    return *this * temp;
 }
 
 Value Value::operator-() {
@@ -36,19 +42,23 @@ Value Value::operator-() {
 }
 
 Value Value::operator-(Value& other) {
-    return *this + (-other);
+    Value temp = -other;
+    return *this + temp;
 }
 
 Value Value::operator-(double other) {
-    return *this - Value(other);
+    Value temp(other);
+    return *this - temp;
 }
 
 Value Value::operator/(Value& other) {
-    return *this * other.pow(-1);
+    Value temp = other.pow(-1);
+    return *this * temp;
 }
 
 Value Value::operator/(double other) {
-    return *this / Value(other);
+    Value temp(other);
+    return *this / temp;
 }
 
 Value Value::pow(double other) {
@@ -63,7 +73,7 @@ Value Value::pow(double other) {
 Value Value::relu() {
     Value out(data < 0 ? 0 : data, { this }, "ReLU");
     out._backward = [this, &out]() {
-        this->gradient += (out.data > 0) * out.gradient; 
+        this->gradient += (out.data > 0) * out.gradient;
     };
     return out;
 }
@@ -75,6 +85,26 @@ Value Value::tanh() {
         this->gradient += (1 - t * t) * out.gradient;
     };
     return out;
+}
+
+Value operator+(double lhs, Value& rhs) {
+    Value temp(lhs);
+    return temp + rhs;
+}
+
+Value operator*(double lhs, Value& rhs) {
+    Value temp(lhs);
+    return temp * rhs;
+}
+
+Value operator-(double lhs, Value& rhs) {
+    Value temp(lhs);
+    return temp - rhs;
+}
+
+Value operator/(double lhs, Value& rhs) {
+    Value temp(lhs);
+    return temp / rhs;
 }
 
 void Value::backward() {
@@ -98,4 +128,9 @@ void Value::backward() {
         // Alternative: (*it)->_backward();
         (*(*it))._backward();
     }
+}
+
+std::ostream& operator<<(std::ostream& os, const Value& v) {
+    os << "Value(Data: " << v.data << ", Gradient: " << v.gradient << ")";
+    return os;
 }
