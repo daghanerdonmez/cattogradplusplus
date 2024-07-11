@@ -1,0 +1,7 @@
+# ninja log v5
+0	433	1720695621222084001	CMakeFiles/cattogradplusplus2.dir/main.cpp.o	554918d30979ae0d
+0	711	1720695621500726051	CMakeFiles/cattogradplusplus2.dir/cattogradplusplus/atto.cpp.o	3d7b3260c9b690ea
+711	753	1720695621543905603	cattogradplusplus2	57f4d2d56e44ed49
+5	339	1720695765905774277	CMakeFiles/cattogradplusplus2.dir/main.cpp.o	5874b35d1ea292fc
+5	602	1720695766167684203	CMakeFiles/cattogradplusplus2.dir/cattogradplusplus/atto.cpp.o	ed19e726d21135b
+602	637	1720695766204844377	cattogradplusplus2	57f4d2d56e44ed49
