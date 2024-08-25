@@ -19,8 +19,8 @@ Value Value::operator+(Value& other) {
 }
 
 Value Value::operator+(double other) {
-    Value temp(other);
-    return *this + temp;
+    auto* temp = new Value(other);
+    return *this + *temp;
 }
 
 Value Value::operator*(Value& other) {
@@ -33,8 +33,8 @@ Value Value::operator*(Value& other) {
 }
 
 Value Value::operator*(double other) {
-    Value temp(other);
-    return *this * temp;
+    auto* temp = new Value(other);
+    return *this * *temp;
 }
 
 Value Value::operator-() {
@@ -42,13 +42,17 @@ Value Value::operator-() {
 }
 
 Value Value::operator-(Value& other) {
-    Value temp = -other;
-    return *this + temp;
+    Value out(data - other.data, { this, &other }, "-");
+    out._backward = [this, &other, &out]() {
+        this->gradient += out.gradient;
+        other.gradient -= out.gradient;
+    };
+    return out;
 }
 
 Value Value::operator-(double other) {
-    Value temp(other);
-    return *this - temp;
+    auto* temp = new Value(other);
+    return *this - *temp;
 }
 
 Value Value::operator/(Value& other) {
@@ -57,8 +61,8 @@ Value Value::operator/(Value& other) {
 }
 
 Value Value::operator/(double other) {
-    Value temp(other);
-    return *this / temp;
+    auto* temp = new Value(other);
+    return *this / *temp;
 }
 
 Value Value::pow(double other) {
@@ -88,23 +92,23 @@ Value Value::tanh() {
 }
 
 Value operator+(double lhs, Value& rhs) {
-    Value temp(lhs);
-    return temp + rhs;
+    auto* temp = new Value(lhs);
+    return *temp + rhs;
 }
 
 Value operator*(double lhs, Value& rhs) {
-    Value temp(lhs);
-    return temp * rhs;
+    auto* temp = new Value(lhs);
+    return *temp * rhs;
 }
 
 Value operator-(double lhs, Value& rhs) {
-    Value temp(lhs);
-    return temp - rhs;
+    auto* temp = new Value(lhs);
+    return *temp - rhs;
 }
 
 Value operator/(double lhs, Value& rhs) {
-    Value temp(lhs);
-    return temp / rhs;
+    auto* temp = new Value(lhs);
+    return *temp / rhs;
 }
 
 void Value::backward() {
